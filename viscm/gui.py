@@ -176,6 +176,7 @@ def _vis_axes(fig):
 
 def lookup_colormap_by_name(name):
     try:
+        import sunpy.cm as cm
         return plt.get_cmap(name)
     except ValueError:
         pass
@@ -231,7 +232,7 @@ class viscm(object):
 
         ax = axes['cmap']
         _show_cmap(ax, RGB)
-        ax.set_title("The colormap in its glory")
+        ax.set_title("Colormap")
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
