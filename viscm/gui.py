@@ -102,9 +102,9 @@ JP_LIM = (-1, 101)
 
 
 def _setup_Jpapbp_axis(ax):
-    ax.set_xlabel("a' (green -> red)")
-    ax.set_ylabel("b' (blue -> yellow)")
-    ax.set_zlabel("J'/K (white -> black)")
+    ax.set_xlabel("a' (green[-], red[+])")
+    ax.set_ylabel("b' (blue[-], yellow[+])")
+    ax.set_zlabel("J'/K (white[100], black[0])")
     ax.set_xlim(*AP_LIM)
     ax.set_ylim(*BP_LIM)
     ax.set_zlim(*JP_LIM)
@@ -1108,7 +1108,7 @@ class ViewerWindow(QtWidgets.QMainWindow):
             caption="Save file",
             directory=self.cmapname + ".png",
             filter="Image Files (*.png *.jpg *.bmp)")
-        self.viscm.save_figure(fileName)
+        self.viscm.save_figure(fileName[0])
 
 
 class EditorWindow(QtWidgets.QMainWindow):
