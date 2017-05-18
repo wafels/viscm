@@ -568,7 +568,7 @@ class viscm_editor(object):
                                           uniform_space,
                                           cmtype=cmtype,    
                                           filter_k=filter_k)
-        
+
         self.highlight_point_model = HighlightPointModel(self.cmap_model, startJp)
         self.highlight_point_model1 = None
 
@@ -599,7 +599,7 @@ class viscm_editor(object):
         self.axes = axes
 
     def save_colormap(self, filepath):
-        with open(filepath, 'w') as f:
+        with open(filepath[0], 'w') as f:
             xp, yp, fixed = self.control_point_model.get_control_points()
             rgb, _ = self.cmap_model.get_sRGB(num=256)
             hex_blob = ""
@@ -631,7 +631,7 @@ class viscm_editor(object):
                        "colors": hex_blob,
                        "extensions": {"https://matplotlib.org/viscm": extensions}
                        }, f, indent=4)
-        print("Saved")
+        print("Saved JSCM file to {:s}".format(filepath[0]))
 
     def export_py(self, filepath):
         import textwrap
@@ -647,8 +647,9 @@ class viscm_editor(object):
         array_list = np.array2string(rgb, max_line_width=78,
                                          prefix='cm_data = ',
                                          separator=',')
-        with open(filepath, 'w') as f:
+        with open(filepath[0], 'w') as f:
             f.write(template.format(**dict(array_list=array_list, type=self.cmtype, name=self.name)))
+        print('Saved script to {:s}'.format(filepath[0]))
 
     def show_viscm(self):
         cm = ListedColormap(self.cmap_model.get_sRGB(num=256)[0],
