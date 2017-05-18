@@ -109,6 +109,7 @@ def _setup_Jpapbp_axis(ax):
     ax.set_ylim(*BP_LIM)
     ax.set_zlim(*JP_LIM)
 
+
 # Adapt a matplotlib colormap to a linearly transformed version -- useful for
 # visualizing how colormaps look given color deficiency.
 # Kinda a hack, b/c we inherit from Colormap (this is required), but then
@@ -137,6 +138,7 @@ class TransformedCMap(matplotlib.colors.Colormap):
 
     def is_gray(self):
         return False
+
 
 def _vis_axes(fig):
     grid = GridSpec(10, 4,
@@ -193,6 +195,7 @@ def lookup_colormap_by_name(name):
         return cm
     raise ValueError("Can't find colormap {!r}".format(name))
 
+
 class viscm(object):
     def __init__(self, cm, figure=None, uniform_space="CAM02-UCS",
                  name=None, N=256, N_dots=50, show_gamut=False):
@@ -200,7 +203,7 @@ class viscm(object):
             cm = lookup_colormap_by_name(cm)
         if name is None:
             name = cm.name
-        if figure == None:
+        if figure is None:
             figure = plt.figure()
         self._sRGB1_to_uniform = cspace_converter("sRGB1", uniform_space)
 
@@ -548,13 +551,13 @@ class viscm_editor(object):
                       "diverging":[-5, -8, -20, -10, 0, 2, 8, 15, 5],
                       "diverging-continuous":[-5, -8, -20, -10, 0, 2, 8, 15, 5]
                       }[cmtype]
-        xy_lim = {"Bezier" : (-100, 100),
-                  "CatmulClark" : (-50, 50)}[self.method]
+        xy_lim = {"Bezier": (-100, 100),
+                  "CatmulClark": (-50, 50)}[self.method]
 
-        BezierModel, startJp = {"linear":(SingleBezierCurveModel, 0.5),
-                                       "diverging":(TwoBezierCurveModel, 0.75),
-                                       "diverging-continuous":(TwoBezierCurveModel, 0.5),
-                                       }[cmtype]
+        BezierModel, startJp = {"linear": (SingleBezierCurveModel, 0.5),
+                                "diverging": (TwoBezierCurveModel, 0.75),
+                                "diverging-continuous": (TwoBezierCurveModel, 0.5),
+                                }[cmtype]
         
         self.control_point_model = ControlPointModel(xp, yp, fixed=self.fixed)
         self.bezier_model = BezierModel(self.control_point_model, self.method)
@@ -566,7 +569,6 @@ class viscm_editor(object):
                                           cmtype=cmtype,    
                                           filter_k=filter_k)
         
-
         self.highlight_point_model = HighlightPointModel(self.cmap_model, startJp)
         self.highlight_point_model1 = None
 
@@ -610,26 +612,25 @@ class viscm_editor(object):
             elif self.cmtype == "linear":
                 usage_hints.append("sequential")
             xp, yp, fixed = self.control_point_model.get_control_points()
-            extensions = {"min_Jp" : self.min_Jp,
-                          "max_Jp" : self.max_Jp,
-                          "xp" : xp,
-                          "yp" : yp,
-                          "fixed" : fixed,
-                          "filter_k" : self.cmap_model.filter_k,
-                          "cmtype" : self.cmtype,
-                          "uniform_colorspace" : self._uniform_space,
-                          "spline_method" : self.method
+            extensions = {"min_Jp": self.min_Jp,
+                          "max_Jp": self.max_Jp,
+                          "xp": xp,
+                          "yp": yp,
+                          "fixed": fixed,
+                          "filter_k": self.cmap_model.filter_k,
+                          "cmtype": self.cmtype,
+                          "uniform_colorspace": self._uniform_space,
+                          "spline_method": self.method
             }
             json.dump({"content-type": "application/vnd.matplotlib.colormap-v1+json",
                        "name": self.name,
-                       "license":"http://creativecommons.org/publicdomain/zero/1.0/",
+                       "license": "http://creativecommons.org/publicdomain/zero/1.0/",
                        "usage-hints": usage_hints,
-                       "colorspace" : "sRGB",
-                       "domain" : "continuous",
-                       "colors" : hex_blob,
-                       "extensions" : {"https://matplotlib.org/viscm" : extensions}
-                        },
-                        f, indent=4)
+                       "colorspace": "sRGB",
+                       "domain": "continuous",
+                       "colors": hex_blob,
+                       "extensions": {"https://matplotlib.org/viscm": extensions}
+                       }, f, indent=4)
         print("Saved")
 
     def export_py(self, filepath):
@@ -648,7 +649,6 @@ class viscm_editor(object):
                                          separator=',')
         with open(filepath, 'w') as f:
             f.write(template.format(**dict(array_list=array_list, type=self.cmtype, name=self.name)))
-
 
     def show_viscm(self):
         cm = ListedColormap(self.cmap_model.get_sRGB(num=256)[0],
@@ -887,6 +887,7 @@ def loadpyfile(path):
         params["max_Jp"] = params.pop("max_JK")
     cmap = ns.get("test_cm", None)
     return params, cmtype, cmap.name, cmap, is_native, method
+
 
 class Colormap(object):
     def __init__(self, cmtype, method, uniform_space):
